@@ -1,0 +1,48 @@
+# Executable Java Application Archives
+
+Executable application archives are JAR or WAR files that can be executed by a simple command on a comand line and contain all necessary dependencies.
+
+
+ * Intoduction
+ ** Overview
+ ** Objectives
+ ** Non-Objectives
+ ** Optional features
+ ** Document conventions
+ 
+ * Fundamentals
+ ** Execution of a Java Application archive
+ *** how to execute on commad line
+ *** as plain JAR, using runtime, define runtime as a dependency (JAR gets the runtime and executes it embedded)
+ ** Classloader topology
+ *** Nested JAR packages and class folders
+ 
+ * Types of executable archives
+ ** Standalone archive
+ *** JAR or WAR
+ ** Light archive
+ *** JAR or WAR
+ *** Requires an embeddable runtime in classpath
+ ** Deployable archive
+ *** WAR
+ *** JAR with an application class
+ 
+ * Structure of executable archives
+ ** Standalone JAR
+ ** Standalone WAR
+ ** Light archive
+ ** Doployable JAR
+ 
+ * Discovery of annotated classes
+ 
+ * Configuration
+ ** external and internal config (xml, yaml)
+ ** external resources (DB,...)
+ ** reference the config spec?
+ 
+ * API
+ ** Handlers for discovered annotated classes
+ ** Embedded runtime
+ 
+ * Command line arguments
+ 
