@@ -7,6 +7,7 @@ Executable application archives are JAR or WAR files that can be executed by a s
  ** Overview
  ** Objectives
  ** Non-Objectives
+ ** Dependencies (Java version, other specifications)
  ** Optional features
  ** Document conventions
  
@@ -17,15 +18,17 @@ Executable application archives are JAR or WAR files that can be executed by a s
  ** Classloader topology
  *** Nested JAR packages and class folders
  
- * Types of executable archives
+ * link:types-of-archives.adoc[Types of executable archives]
  ** Standalone archive
  *** JAR or WAR
+ ** Deployable archive
+ *** to be deployed to a runtime, which itself can be a standalone archive
+ *** WAR
+ *** JAR with an application class
+ ** Runtime JAR file - same as standalone JAR but supports some cmd line arguments for deployment of deployable archive
  ** Light archive
  *** JAR or WAR
  *** Requires an embeddable runtime in classpath
- ** Deployable archive
- *** WAR
- *** JAR with an application class
  
  * Structure of executable archives
  ** Standalone JAR

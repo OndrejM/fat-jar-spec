@@ -1,0 +1,37 @@
+# Types of executable archives
+
+Executable archives are JAR or WAR packages that contain either all dependencies or require a single runtime dependency. In either case, they can be executed from a command line using `java` command, which only refers to the executable archive and optionally to a JAR archive with a required runtime.
+
+ ## Standalone archive
+ 
+A standalone archive is a JAR or WAR package that contains all its dependencies inside at a specified location. No other dependency except for JRE is necessary to execute the packaged application.
+ 
+It is possible to execute the application just using a `java -jar` command:
+ 
+```Shell
+ java -jar standalone.jar 
+```
+
+The same applies for a WAR package:
+
+```Shell
+ java -jar standalone.war 
+```
+
+The WAR package is also a standard web application archive, deployable to web container. To separate the dependencies, which are provided by the container and should not be loaded when deployed as a WAR package, such dependencies are placed at a different location from other dependencies. The location is specified in the section about the structure of eecutable archives.
+ 
+## Deployable archive
+  
+A deployable archive does not contain a main class and requires an additional standalone runtime JAR file. 
+
+Any WAR archive is a deployable archive. It can be deployed with runtimes that can deploy standard WAR applications. 
+
+Any JAR file that is to be deployed with a runtime, should specify an application class in MANIFEST.MF in META-INF directory. The application class should be listed under the key `Application-Class` with fully qualified class name as the value. The requireements on the application class are out of scope of this document and may differ among runtimes. It is up to a runtime, but is highly recommended, that a deployable JAR file can have the same structure as a standalone executable archive and all its bundled dependencies will be loaded upon deployment.
+
+## Runtime JAR archive
+
+ ** Runtime JAR file - same as standalone JAR but supports some cmd line arguments for deployment of deployable archive
+ ** Light archive
+ *** JAR or WAR
+ *** Requires an embeddable runtime in classpath
+ 
