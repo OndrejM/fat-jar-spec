@@ -4,7 +4,7 @@ Executable archives are JAR or WAR packages that contain either all dependencies
 
  ## Standalone archive
  
-A standalone archive is a JAR or WAR package that contains all its dependencies inside at a specified location. No other dependency except for JRE is necessary to execute the packaged application.
+A standalone archive is a JAR or WAR package that contains all its dependencies inside at a specified location. No other dependency except for JRE is necessary to execute the packaged application. Any JAR file with a main class defined in META-INF/MANIFEST.MF is a standalone executable archive. But typically, such JAR file contains a loader class that loads all the bundled dependencies from other locations within the archive.
  
 It is possible to execute the application just using a `java -jar` command:
  
@@ -26,12 +26,34 @@ A deployable archive does not contain a main class and requires an additional st
 
 Any WAR archive is a deployable archive. It can be deployed with runtimes that can deploy standard WAR applications. 
 
-Any JAR file that is to be deployed with a runtime, should specify an application class in MANIFEST.MF in META-INF directory. The application class should be listed under the key `Application-Class` with fully qualified class name as the value. The requireements on the application class are out of scope of this document and may differ among runtimes. It is up to a runtime, but is highly recommended, that a deployable JAR file can have the same structure as a standalone executable archive and all its bundled dependencies will be loaded upon deployment.
+Any JAR file that is to be deployed with a runtime, should specify an application class in MANIFEST.MF in META-INF directory. The application class should be listed under the key `Application-Class` with fully qualified class name as the value. The requirements on the application class are out of scope of this document and may differ among runtimes. It is up to a runtime, but is highly recommended, that a deployable JAR file be a standalone executable archive and all its bundled dependencies will be loaded upon deployment.
 
 ## Runtime JAR archive
 
- ** Runtime JAR file - same as standalone JAR but supports some cmd line arguments for deployment of deployable archive
- ** Light archive
- *** JAR or WAR
- *** Requires an embeddable runtime in classpath
+A Runtime JAR is a Standalone JAR archive, which contains a runtime that can deploy and run a Deployable archive. Runtime JAR and a Deployable archive together provide the same functionality as a full Standalone archive containing all application dependencies.
+
+A Runtime JAR contains an `Archive-Type` entry in `META-INF/MANIFEST.MF` with the value of `runtime` to distinguish it from a usual Standalone archive.
+
+On top of a plain Standalone JAR archive, a Runtime JAR accepts the following command line arguments when executed as `java -jar runtime.jar`:
+
+* path to a Deployable archive that will be deployed after startup (can optionally support exploded archives, if the path is a directory)
+* `--deployDir` -- path to a `deploy` directory with Deployable archives. In this case all supported archives found in the folder will be deployed upon startup. This argument is optional. It is also optional to deploy exploded archives in the directory. It is up to a runtime which archives/directories in the `deploy` directory will be quaified as deployable applications.
+
+In the simplest case, it is possible to execute a Deployable archive `deployable.war` using a Runtime JAR file `runtime.jar` as follows:
+
+```Shell
+java -jar runtime.jar deployable.war
+```
+ 
+## Light archive
+ 
+This type of an executable archive is meant to depend on an embeddable runtime, which is provided on classpath and provides the Embedded Runtime API to access it. The embeddable runtime provides means to load all dependencies bundled in the light archive, so that the light archive does not need to contain any functionality to load its bundled dependeencies.
+
+A Light archive contains an `Archive-Type` entry in `META-INF/MANIFEST.MF` with the value of `runtime-required` to distinguish it from a usual Standalone archive.
+
+In the simplest form, a light archive `light.jar` can be executed using an embeddable runtime JAR `embeddable.jar` as its dependency, as follows:
+
+```Shell
+java -cp embeddable.jar -jar light.jar
+```
  
