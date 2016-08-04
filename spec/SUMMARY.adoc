@@ -30,7 +30,7 @@ Executable application archives are JAR or WAR files that can be executed by a s
  *** JAR or WAR
  *** Requires an embeddable runtime in classpath
  
- * Structure of executable archives
+ * link:structure.adoc[Structure of executable archives]
  ** Standalone JAR
  ** Standalone WAR
  ** Light archive

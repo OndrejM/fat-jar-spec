@@ -1,0 +1,16 @@
+# Structure of executable archives
+
+General structure:
+
+ * root
+   ** contains resources on classpath
+ * META-INF
+   ** Main-Class: defines main class, typically a launcher
+   ** Application-Class: defines the main application class for deployable JAR archives
+   ** Archive-Type: defines type of the archive for applicable types
+   *** runtime - for Runtime JAR
+   *** runtime-required - for Light archive
+ * APP-INF
+   ** classes - folder with application class files
+   ** lib - folder with JAR dependencies
+   
