@@ -24,3 +24,7 @@ The configuration part may be optional.
 ## Document conventions
  
 To be done...
+
+## List of contributors
+
+* Ondrej Mihályi
