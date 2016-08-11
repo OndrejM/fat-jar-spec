@@ -1,16 +1,85 @@
 # Structure of executable archives
 
-General structure:
+All types of executable archives, both JAR and WAR files, comply with the JAR file format. It means that they all can be executed using `java -jar` from the command line.  
+
+An executable archive must contain `MANIFEST.MF` file in directory `META-INF` as any usual JAR archive. This file must contain at least `Main-Class` attribute to define the default executable class. This class must must be available inside the archive. The `MANIFEST.MF` file must not contain `Class-Path` attribute, which usually includes external resources in the classpath.
+
+ ??? Should APP-INF be inside META-INF to be automatically excluded from the initial classpath?
+ 
+## MANIFEST.MF 
+
+The MANIFEST.MF may include the following attributes:
+
+
+   * Main-Class: defines main class, typically a loader, available in first-level classpath
+   * Application-Class: defines the main application class for deployable JAR archives, accessible in the full classpath
+   * Archive-Type: defines type of the archive for applicable archive types
+   ** runtime - for Runtime JAR
+   ** runtime-required - for Light archive
+
+## APP.INF directory
+
+An executable archive may also contain a directory `APP-INF`, which stores resources that are added to the first-level classpath to compose the full classpath. This directory may contain directories for each type of resources:
+
+   * `classes` - contains application class files - this directory is added to the full classpath
+   * `lib` - contains JAR dependencies - all JAR files in this directory are added to the full classpath
+   * `deploy` - contains deployable archives - all JAR or WAR files in this directory are to be loaded in the same way as if they were passed to a Runtime executable archive as an argument.
+   
+All of the above directories are optional. If they exist, they are added to the full classpath.
+
+### deploy directory in APP-INF
+
+The `deploy` directory contains nested Deployable archives, which can also be deployed to a Runtime executable archive if extracted out of the container archive. The mechanism of how they are loaded is implementation specific, but it is intended to work very similar as if the contents of the `deploy` directory were extracted to a directory `deployables` and passed as an argument to a Runtime executable archive as follows:
+
+```Shell
+java -jar runtime.jar --deployDir deployables
+```
+
+## WEB-INF directory
+
+If an executable archive is also a WAR file, it may also contain classpath resources in the following directories inside a `WEB-INF` directory:
+
+* `classes` - contains web application class files - this directory is added to the full classpath
+* `lib` - contains webapp JAR dependencies - all JAR files in this directory are added to the full classpath
+
+These resources in the `WEB-INF` directory are to be included in the full classpath, after the resources in directories in `APP-INF`. 
+
+## The resources in the full classpath
+
+The resources in an executable archive are added to the full classpath in the following order (if they exist):
+
+1. root of the archive (excluding `META-INF` directory`)
+
+1. `APP-INF/classes` directory
+
+1. JAR files in the `APP-INF/lib` directory (in unspecified order)
+
+1. deployable archives from `APP-INF/deploy` directory (in unspecified order)
+
+1. `WEB-INF/classes` directory
+
+1. JAR files in the `WEB-INF/lib` directory (in unspecified order)
+
+
+## Complete structure of an executable archive:
 
  * root
-   ** contains resources on classpath
+   ** classpath resources...
  * META-INF
-   ** Main-Class: defines main class, typically a launcher
-   ** Application-Class: defines the main application class for deployable JAR archives
-   ** Archive-Type: defines type of the archive for applicable types
-   *** runtime - for Runtime JAR
-   *** runtime-required - for Light archive
+   ** MANIFEST.MF
  * APP-INF
-   ** classes - folder with application class files
-   ** lib - folder with JAR dependencies
+   ** classes
+     *** classpath resources...
+   ** lib
+     *** library.jar
+     *** ...
+   ** deploy
+     *** deployable.war
+     *** ...
+     
+ * WEB-INF (only for WAR archives)
+   ** classes
+     *** classpath resources...
+   ** lib
+     *** library.jar
    

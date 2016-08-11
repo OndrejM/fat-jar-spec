@@ -1,10 +1,12 @@
 # Types of executable archives
 
-Executable archives are JAR or WAR packages that contain either all dependencies or require a single runtime dependency. In either case, they can be executed from a command line using `java` command, which only refers to the executable archive and optionally to a JAR archive with a required runtime.
+Executable archives are JAR or WAR packages that contain either all dependencies or require a single runtime dependency. In either case, they can be executed from a command line using `java` command, which only refers to the executable archive and optionally to an archive with a required runtime.
 
- ## Standalone archive
+If a WAR is used as an executable archive, it must comply with the standard JAR file structure, even though it contains additional files usually found in a WAR file. In other words, the same archive can be used both as a WAR file and as a JAR file.
+
+## Standalone executable archive
  
-A standalone archive is a JAR or WAR package that contains all its dependencies inside at a specified location. No other dependency except for JRE is necessary to execute the packaged application. Any JAR file with a main class defined in META-INF/MANIFEST.MF is a standalone executable archive. But typically, such JAR file contains a loader class that loads all the bundled dependencies from other locations within the archive.
+A __standalone executable archive__ is a JAR or WAR package that contains all its dependencies inside at a specified location. No other dependency except for JRE is necessary to execute the packaged application. Any JAR file with a main class defined in `META-INF/MANIFEST.MF is` a standalone executable archive. But typically, such JAR file contains a loader class that loads all the bundled dependencies from other locations within the archive.
  
 It is possible to execute the application just using a `java -jar` command:
  
@@ -12,31 +14,22 @@ It is possible to execute the application just using a `java -jar` command:
  java -jar standalone.jar 
 ```
 
-The same applies for a WAR package:
+The same applies for a WAR package, if it is also compatible with JAR file structure and the requirements specified above:
 
 ```Shell
  java -jar standalone.war 
 ```
 
-The WAR package is also a standard web application archive, deployable to web container. To separate the dependencies, which are provided by the container and should not be loaded when deployed as a WAR package, such dependencies are placed at a different location from other dependencies. The location is specified in the section about the structure of eecutable archives.
- 
-## Deployable archive
-  
-A deployable archive does not contain a main class and requires an additional standalone runtime JAR file. 
 
-Any WAR archive is a deployable archive. It can be deployed with runtimes that can deploy standard WAR applications. 
+## Runtime executable archive
 
-Any JAR file that is to be deployed with a runtime, should specify an application class in MANIFEST.MF in META-INF directory. The application class should be listed under the key `Application-Class` with fully qualified class name as the value. The requirements on the application class are out of scope of this document and may differ among runtimes. It is up to a runtime, but is highly recommended, that a deployable JAR file be a standalone executable archive and all its bundled dependencies will be loaded upon deployment.
-
-## Runtime JAR archive
-
-A Runtime JAR is a Standalone JAR archive, which contains a runtime that can deploy and run a Deployable archive. Runtime JAR and a Deployable archive together provide the same functionality as a full Standalone archive containing all application dependencies.
+A __Runtime JAR__ is a Standalone JAR archive, which contains a runtime that can deploy and run a __Deployable archive__. Runtime JAR and a Deployable archive together provide the same functionality as a full Standalone archive containing all application dependencies.
 
 A Runtime JAR contains an `Archive-Type` entry in `META-INF/MANIFEST.MF` with the value of `runtime` to distinguish it from a usual Standalone archive.
 
 On top of a plain Standalone JAR archive, a Runtime JAR accepts the following command line arguments when executed as `java -jar runtime.jar`:
 
-* path to a Deployable archive that will be deployed after startup (can optionally support exploded archives, if the path is a directory)
+* path to a Deployable archive that will be deployed after startup (can optionally support exploded archives, if the path is a directory). Multiple Deployable archives may be passed.
 * `--deployDir` -- path to a `deploy` directory with Deployable archives. In this case all supported archives found in the folder will be deployed upon startup. This argument is optional. It is also optional to deploy exploded archives in the directory. It is up to a runtime which archives/directories in the `deploy` directory will be quaified as deployable applications.
 
 In the simplest case, it is possible to execute a Deployable archive `deployable.war` using a Runtime JAR file `runtime.jar` as follows:
@@ -44,8 +37,29 @@ In the simplest case, it is possible to execute a Deployable archive `deployable
 ```Shell
 java -jar runtime.jar deployable.war
 ```
+
+Multiple Deployable archives `deployable1.war` and `deployable2.jar` may be passed as follows:
+
+```Shell
+java -jar runtime.jar deployable1.war deployable2.jar
+```
+
+Arguments may be combined. In order to deploy a specific archive and also all archives in a directory `deployables`, the command line may look like this:
+
+```Shell
+java -jar runtime.jar deployable.war --deployDir deployables
+```
+
+### Deployable archive
+  
+A deployable archive does not contain a main class and requires an additional standalone runtime JAR file. 
+
+Any WAR archive is a deployable archive. It can be deployed with runtimes that can deploy standard WAR applications. 
+
+Any JAR file that is to be deployed with a runtime, should specify an application class in MANIFEST.MF in META-INF directory. The application class should be listed under the key `Application-Class` with fully qualified class name as the value. The requirements on the application class are out of scope of this document and may differ among runtimes. It is up to a runtime, but is highly recommended, that a deployable JAR file be a standalone executable archive and all its bundled dependencies will be loaded upon deployment.
+
  
-## Light archive
+## Light executable archive
  
 This type of an executable archive is meant to depend on an embeddable runtime, which is provided on classpath and provides the Embedded Runtime API to access it. The embeddable runtime provides means to load all dependencies bundled in the light archive, so that the light archive does not need to contain any functionality to load its bundled dependeencies.
 
