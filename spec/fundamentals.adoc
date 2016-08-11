@@ -1,0 +1,33 @@
+# Fundamentals
+
+## Execution of a Java Application archive
+
+From user point of view, an executable application archive is executed with a very simple command line command runs `java` program with `-jar` argument and very few other arguments. If the archive is standalone, with no additional dependencies, the command line looks simply like this:
+
+```Shell
+java -jar standalone.jar
+```
+
+Some types of executable archives require additional dependencies, but these are ideally packed as a single additional file. The command line would look like this:
+
+```Shell
+java -jar runtime.jar application.jar
+```
+
+or like this:
+
+```Shell
+java -cp embeddable-runtime.jar -jar application.jar
+```
+
+## Mechanism of building the full application classpath
+
+A plain executable JAR file is executed with classpath containing the root of the archive. More complex scenarios require building the classpath from nested resources, such as nested JAR files or class directories in other locations within the archive. The `java` command does not load sch resources out of the box, therefore this must be done by the main class defined as the Main-Class attribute in `META-INF/MANIFEST.MF` file. In this document, such class is called a loader.
+
+The loader class bootstraps the full classpath available to the application. It should find additional resources in other specified locations and add them to the classpath before launching the application. Afterwards, it should launch the application, typically by invoking a method on the class defined by the attribute `Application-Class` in the `META-INF/MANIFEST.MF` file. However, this is only a recommendation. Defining how the reources are loaded by the classloader and how the application is launched afterwards is out of scope of this document.
+
+## Discovery of annotated classes
+
+ ??? Optional feature? - but would be very useful to optiize loading of libraries, which need to read annotations for configuration, such as hibernate
+ 
+The idea is that after the full classpath is built, it would be scanned for annotations before the application starts so that this is needed only once. Libraries such as hibernate would be provided by a hook to retrieve the metadata about the annotations without needing to scan the classpath themselves. This is similar to what most Java EE application servers do, but it is nowhere specified.

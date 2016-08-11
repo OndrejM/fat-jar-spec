@@ -1,0 +1,26 @@
+# Introduction
+
+## Overview
+
+To be done...
+
+## Objectives
+
+The objectives are to specify a common structure of executable Java archives across various technologies that provide nesting of application dependencies inside an xecutable archive. This document specifies most common scenarios of executing Java archives using a very short command. It also specifies where and how the additional nested resources are stored inside an archive.
+
+## Non-Objectives
+
+This document aims to specify how the contents of executable Java archives look like and how users execute such archives in a common way. It does not focus on how the archives are executed beyond by a loader class, which is specified as the main class of the archive. Neither it specifies how the classpath is built apart from specifying the order in which various locations are added to the classpath. These are considered implementation specific and not important for running and manipulating with the arhives.
+
+## Dependencies (Java version, other specifications)
+
+* JRE 8
+* possibly a config spec for the configuration part
+
+## Optional features
+
+The configuration part may be optional.
+
+## Document conventions
+ 
+To be done...

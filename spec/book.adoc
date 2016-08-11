@@ -3,10 +3,15 @@
 Executable application archives are JAR or WAR files that can be executed by a simple command on a comand line and contain all necessary dependencies.
 
 
- * link:intro.adoc[Introduction]
- * link:fundamentals.adoc[Fundamentals]
- * link:types-of-archives.adoc[Types of executable archives]
- * link:structure.adoc[Structure of executable archives]
+include::intro.adoc[Introduction]
+
+include::fundamentals.adoc[Fundamentals]
+
+include::types-of-archives.adoc[Types of executable archives]
+
+include::structure.adoc[Structure of executable archives]
+
+# Other chapters
 
  * Configuration
  ** external and internal config (xml, yaml)

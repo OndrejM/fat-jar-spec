@@ -8,14 +8,14 @@ An executable archive must contain `MANIFEST.MF` file in directory `META-INF` as
  
 ## MANIFEST.MF 
 
-The MANIFEST.MF may include the following attributes:
+The `MANIFEST.MF` may include the following attributes:
 
 
-   * Main-Class: defines main class, typically a loader, available in first-level classpath
-   * Application-Class: defines the main application class for deployable JAR archives, accessible in the full classpath
-   * Archive-Type: defines type of the archive for applicable archive types
-   ** runtime - for Runtime JAR
-   ** runtime-required - for Light archive
+   * `Main-Class`: defines main class, typically a loader, available in first-level classpath
+   * `Application-Class`: defines the main application class for deployable JAR archives, accessible in the full classpath
+   * `Archive-Type`: defines type of the archive for applicable archive types
+   ** `runtime` - for Runtime JAR
+   ** `runtime-required` - for Light archive
 
 ## APP.INF directory
 
