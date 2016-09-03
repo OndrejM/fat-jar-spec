@@ -27,4 +27,4 @@ To be done...
 
 ## List of contributors
 
-* Ondrej Mihályi
+* https://github.com/OndrejM[Ondrej Mihályi]
