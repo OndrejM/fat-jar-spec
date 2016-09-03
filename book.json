@@ -1,3 +1,6 @@
 {
-    "root": "spec"
+    "root": "spec",
+    "structure": {
+        "readme": "intro.adoc"
+    }
 }
