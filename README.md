@@ -10,6 +10,8 @@ Cooperation is welcome.
 The [spec](spec) directory contains the written specification.
 The root file of the specification is [SUMMARY](spec/SUMMARY.adoc).
 
+The compiled specification can be previewed as a gitbook here: [executable-jar-spec](https://ondrejm.gitbooks.io/executable-jar-spec/content/).
+
 ## The reference implementation
 
 The [impl](impl) directory contains the reference specification.
